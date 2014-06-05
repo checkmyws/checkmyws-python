@@ -20,12 +20,12 @@ with open(os.path.join(os.path.dirname(__file__),
                        '__init__.py')) as f:
         data = f.read()
 
-        version = re.search("__version__ = \"([^']+)\"", data).group(1)
-        license = re.search("__license__ = \"([^']+)\"", data).group(1)
-        author = re.search("__author__ = \"([^']+)\"", data).group(1)
-        author_email = re.search("__author_email__ = \"([^']+)\"", data).group(1)
-        description = re.search("__description__ = \"([^']+)\"", data).group(1)
-        url = re.search("__url__ = \"([^']+)\"", data).group(1)
+        version = re.search("__version__ = \"(.*)\"", data).group(1)
+        license = re.search("__license__ = \"(.*)\"", data).group(1)
+        author = re.search("__author__ = \"(.*)\"", data).group(1)
+        author_email = re.search("__author_email__ = \"(.*)\"", data).group(1)
+        description = re.search("__description__ = \"(.*)\"", data).group(1)
+        url = re.search("__url__ = \"(.*)\"", data).group(1)
 
 with open('requirements.txt', 'r') as f:
     requires = [x.strip() for x in f if x.strip()]
