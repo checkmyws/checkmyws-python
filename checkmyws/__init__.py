@@ -9,5 +9,5 @@ __license__ = "MIT License"
 __version__ = "0.1.2"
 __url__ = "https://github.com/checkmyws/checkmyws-python"
 
-from checkmyws.client import CheckmywsClient  # NOQA
-from checkmyws.exception import CheckmywsError  # NOQA
+from .client import CheckmywsClient  # NOQA
+from .exception import CheckmywsError  # NOQA

@@ -7,10 +7,7 @@ try:
 except:
     pass
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
+from distutils.core import setup
 
 import os
 import re
@@ -41,7 +38,7 @@ setup(
     author=author,
     author_email=author_email,
     license=license,
-    packages=find_packages(exclude=['tests']),
+    packages=['checkmyws'],
     test_suite='tests',
     tests_require=test_requires,
     install_requires=requires,
