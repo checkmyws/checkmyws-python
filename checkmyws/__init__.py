@@ -7,7 +7,7 @@ __author_email__ = "contact@checkmy.ws"
 __copyright__ = "Copyright 2014 Novateek"
 __license__ = "MIT License"
 __version__ = "0.1.2"
-__url__ = "http://www.checkmy.ws/"
+__url__ = "https://github.com/checkmyws/checkmyws-python"
 
 from checkmyws.client import CheckmywsClient  # NOQA
 from checkmyws.exception import CheckmywsError  # NOQA
