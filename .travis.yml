@@ -10,7 +10,7 @@ deploy:
   provider: pypi
   user: William.Pain
   password:
-    secure: PP9wdtx88d896AGMzqzx0vQoSU6gFU1I63HDDIYtuCxZbLPoqIEkuLpfnySC5OcC6sArIU3B0EvjsH9FuVuN0HVxEFmcbEvEok6RJLahFzTwKZ1jg9TdXFuqrzefjaNwrmOPZdEMs7JDliarI8ZvevomV9QgWce7rgkiV6yGWD8=
+    secure: eYnUDGDgrrrTEBPb9I5nJ3DMKNCC7EkCroBAZRCRrYytVi+jzZcqrsj7YxEmNJUyRRXgYUMJU+4WtnDlV0/ti92BO3S/R17VF8uvn1wxNRVI0UiBIEgmhCZX634eYYFVD8jqXgfhiQnLQkwoG/SkqzEytdlVLEj4RWUfZvKOcGQ=
   on:
     tags: true
     repo: checkmyws/checkmyws-python
