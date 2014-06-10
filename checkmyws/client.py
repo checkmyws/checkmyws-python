@@ -14,11 +14,19 @@ BASE_URL = "http://api.checkmy.ws/api"
 
 class CheckmywsClient(object):
 
-    def __init__(self):
+    def __init__(self, proxy=None):
         self.logger = logging.getLogger("CheckmywsClient")
         self.logger.debug("Initialize")
 
         self.session = requests.Session()
+
+        self.proxies = None
+
+        if proxy is not None:
+            self.proxies = {
+                "http": proxy,
+                "https": proxy
+            }
 
     def request(self, path, method="GET", params=None, data=None,
                 status_code=200):
@@ -38,7 +46,8 @@ class CheckmywsClient(object):
                 url=url,
                 params=params,
                 data=data,
-                verify=False
+                verify=False,
+                proxies=self.proxies
             )
 
             if response.status_code == status_code:
