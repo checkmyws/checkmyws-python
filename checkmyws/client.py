@@ -9,7 +9,7 @@ import json
 
 from checkmyws.exception import CheckmywsError
 
-BASE_URL = "http://api.checkmy.ws/api"
+BASE_URL = "https://api.checkmy.ws/api"
 
 
 class CheckmywsClient(object):
@@ -46,7 +46,7 @@ class CheckmywsClient(object):
                 url=url,
                 params=params,
                 data=data,
-                verify=False,
+                verify=True,
                 proxies=self.proxies
             )
 
