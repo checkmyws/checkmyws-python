@@ -3,4 +3,4 @@
 checkmyws-python
 ================
 
-Check my Website client
+[Check my Website](https://checkmy.ws) client for Python.
