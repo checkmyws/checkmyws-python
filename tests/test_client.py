@@ -16,7 +16,7 @@ from checkmyws import CheckmywsClient
 from checkmyws import CheckmywsError
 
 client = None
-check_id = "9597dc65-6a94-4a91-8200-63b1368a7e1c"
+check_id = "3887e18a-28d6-4eac-9eb0-c6d9075e4c7e"
 
 @all_requests
 def mock_200(url, request):
