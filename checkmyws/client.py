@@ -3,11 +3,13 @@
 python client for www.checkmy.ws
 """
 
-import requests
 import logging
+import requests
 import json
 
 from checkmyws.exception import CheckmywsError
+
+logging.captureWarnings(True)
 
 BASE_URL = "https://api.checkmy.ws/api"
 
