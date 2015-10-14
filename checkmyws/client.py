@@ -2,6 +2,8 @@
 """
 python client for www.checkmy.ws
 """
+import sys
+PY26 = sys.version_info[0] == 2 and sys.version_info[1] == 6
 
 import logging
 import requests
@@ -9,20 +11,27 @@ import json
 
 from checkmyws.exception import CheckmywsError
 
-logging.captureWarnings(True)
+if PY26:
+    requests.packages.urllib3.disable_warnings()
+
+else:
+    logging.captureWarnings(True)
 
 BASE_URL = "https://api.checkmy.ws/api"
 
 
 class CheckmywsClient(object):
 
-    def __init__(self, proxy=None):
+    def __init__(self, proxy=None, verify=True):
         self.logger = logging.getLogger("CheckmywsClient")
         self.logger.debug("Initialize")
 
         self.session = requests.Session()
-
         self.proxies = None
+        self.verify = verify
+
+        if PY26:
+            self.verify = False
 
         if proxy is not None:
             self.proxies = {
@@ -48,7 +57,7 @@ class CheckmywsClient(object):
                 url=url,
                 params=params,
                 data=data,
-                verify=True,
+                verify=self.verify,
                 proxies=self.proxies
             )
 

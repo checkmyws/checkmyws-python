@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import sys
+PY26 = sys.version_info[0] == 2 and sys.version_info[1] == 6
 
 import logging
 logging.basicConfig(
@@ -7,7 +9,13 @@ logging.basicConfig(
 )
 
 import json
-import unittest
+
+if PY26:
+    import unittest2 as unittest
+
+else:
+    import unittest
+
 import requests
 
 from httmock import all_requests, HTTMock
