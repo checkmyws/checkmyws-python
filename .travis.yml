@@ -2,9 +2,11 @@ language: python
 python:
 - '3.4'
 - '2.7'
+- '2.6'
 install:
 - pip install -r requirements.txt --use-mirrors
 - pip install -r test-requirements.txt --use-mirrors
+- if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install importlib unittest2;
 script: nosetests
 deploy:
   provider: pypi
