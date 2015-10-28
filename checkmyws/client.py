@@ -37,7 +37,8 @@ class CheckmywsClient(object):
         self.passwd = passwd
         self.token = token
         self.authed = False
-        self.last_authed = None
+
+        self.last_request = None
 
         if passwd and len(passwd) != 40:
             self.passwd = hashlib.sha1(passwd.encode('utf8')).hexdigest()
@@ -71,14 +72,15 @@ class CheckmywsClient(object):
             )
 
             if response.status_code == status_code:
+                self.last_request = time.time()
                 return response
             else:
                 raise CheckmywsError(response)
 
     def signin(self):
         if self.authed:
-            last_authed = time.time() - self.last_authed
-            if last_authed < 3600:
+            age = time.time() - self.last_request
+            if age < 3600:
                 return
 
         data = {
@@ -91,7 +93,6 @@ class CheckmywsClient(object):
 
         self.request(path="/auth/signin", method="POST", data=data)
         self.authed = True
-        self.last_authed = time.time()
 
     def logout(self):
         self.request(path="/auth/logout", method="GET")

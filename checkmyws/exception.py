@@ -9,11 +9,13 @@ class CheckmywsError(Exception):
     def __init__(self, response):
         self.status_code = response.status_code
         self.reason = response.reason
+        self.url = response.url
 
         super(CheckmywsError, self).__init__(self.__str__())
 
     def __repr__(self):
-        msg = "CheckmywsError: HTTP {0} - {1}".format(
+        msg = "CheckmywsError '{0}': HTTP {1} - {2}".format(
+            self.url,
             self.status_code,
             self.reason
         )
