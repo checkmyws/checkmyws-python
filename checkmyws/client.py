@@ -7,7 +7,8 @@ PY26 = sys.version_info[0] == 2 and sys.version_info[1] == 6
 
 import logging
 import requests
-import json
+import hashlib
+import time
 
 from checkmyws.exception import CheckmywsError
 
@@ -22,13 +23,24 @@ BASE_URL = "https://api.checkmy.ws/api"
 
 class CheckmywsClient(object):
 
-    def __init__(self, proxy=None, verify=True):
+    def __init__(self, proxy=None, verify=True,
+                 login=None, passwd=None, token=None):
+
         self.logger = logging.getLogger("CheckmywsClient")
         self.logger.debug("Initialize")
 
         self.session = requests.Session()
         self.proxies = None
         self.verify = verify
+
+        self.login = login
+        self.passwd = passwd
+        self.token = token
+        self.authed = False
+        self.last_authed = None
+
+        if passwd and len(passwd) != 40:
+            self.passwd = hashlib.sha1(passwd.encode('utf8')).hexdigest()
 
         if PY26:
             self.verify = False
@@ -49,14 +61,11 @@ class CheckmywsClient(object):
             if params is None:
                 params = {}
 
-            if data is not None and not isinstance(data, str):
-                data = json.dumps(data)
-
             response = self.session.request(
                 method=method,
                 url=url,
                 params=params,
-                data=data,
+                json=data,
                 verify=self.verify,
                 proxies=self.proxies
             )
@@ -66,8 +75,66 @@ class CheckmywsClient(object):
             else:
                 raise CheckmywsError(response)
 
+    def signin(self):
+        if self.authed:
+            last_authed = time.time() - self.last_authed
+            if last_authed < 3600:
+                return
+
+        data = {
+            'login': self.login,
+            'passwd': self.passwd
+        }
+
+        if self.token:
+            data['token'] = self.token
+
+        self.request(path="/auth/signin", method="POST", data=data)
+        self.authed = True
+        self.last_authed = time.time()
+
+    def logout(self):
+        self.request(path="/auth/logout", method="GET")
+        self.authed = False
+
     def status(self, check_id):
         path = "/status/{0}".format(check_id)
         response = self.request(path=path, method="GET")
+        return response.json()
+
+    def workers(self):
+        self.signin()
+        response = self.request(path="/workers", method="GET")
+        return response.json()
+
+    def checks(self):
+        self.signin()
+        response = self.request(path="/checks", method="GET")
+        return response.json()
+
+    def check_create(self, data):
+        self.signin()
+        response = self.request(path="/checks", method="POST", data=data)
+        return response.json()
+
+    def check(self, check_id, data=None):
+        self.signin()
+        path = "/checks/{0}".format(check_id)
+
+        if data is None:
+            response = self.request(path=path, method="GET")
+        else:
+            response = self.request(path=path, method="POST", data=data)
 
         return response.json()
+
+    def check_overview(self, check_id):
+        self.signin()
+        path = "/overview/{0}".format(check_id)
+        response = self.request(path=path, method="GET")
+        return response.json()
+
+    def check_delete(self, check_id):
+        self.signin()
+        path = "/checks/{0}".format(check_id)
+        self.request(path=path, method="DELETE")

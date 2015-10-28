@@ -30,6 +30,9 @@ check_id = "3887e18a-28d6-4eac-9eb0-c6d9075e4c7e"
 def mock_200(url, request):
     return {'status_code': 200, 'content': None}
 
+@all_requests
+def mock_200_json(url, request):
+    return {'status_code': 200, 'content': {'_id': '_id'}}
 
 @all_requests
 def mock_404(url, request):
@@ -110,6 +113,65 @@ class TestCase(unittest.TestCase):
         data = client.status(check_id)
         self.assertEqual(data['_id'], check_id)
         print("URL: %s" % data['url'])
+
+    def test_04_signin(self):
+        client = CheckmywsClient(login='unittest', passwd='unittest')
+
+        self.assertNotEqual(client.passwd, 'unittest')
+        self.assertEqual(client.authed, False)
+
+        with HTTMock(mock_401):
+            with self.assertRaises(CheckmywsError):
+                client.signin()
+
+        self.assertEqual(client.authed, False)
+
+        with HTTMock(mock_200):
+            client.signin()
+
+        self.assertEqual(client.authed, True)
+
+    def test_05_logout(self):
+        client = CheckmywsClient(login='unittest', token='unittest')
+        self.assertEqual(client.authed, False)
+
+        with HTTMock(mock_200):
+            client.signin()
+
+        self.assertEqual(client.authed, True)
+
+        with HTTMock(mock_401):
+            with self.assertRaises(CheckmywsError):
+                client.logout()
+
+        self.assertEqual(client.authed, True)
+
+        with HTTMock(mock_200):
+            client.logout()
+
+        self.assertEqual(client.authed, False)
+
+    def test_06_checks(self):
+        with HTTMock(mock_200_json):
+            client.workers()
+
+        with HTTMock(mock_200_json):
+            client.checks()
+
+        with HTTMock(mock_200_json):
+            client.check('mycheck')
+
+        with HTTMock(mock_200_json):
+            client.check('mycheck', {'url': '123'})
+
+        with HTTMock(mock_200_json):
+            client.check_create({'url': '123'})
+
+        with HTTMock(mock_200_json):
+            client.check_delete('mycheck')
+
+        with HTTMock(mock_200_json):
+            client.check_overview('mycheck')
 
 if __name__ == '__main__':
     unittest.main()
