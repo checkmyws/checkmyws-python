@@ -66,7 +66,16 @@ class TestCase(unittest.TestCase):
 
     def test_01_init(self):
         global client
+
+        client = CheckmywsClient(url="https://api.dev.checkmy.ws/api")
+        self.assertEqual(client.url, "https://api.dev.checkmy.ws/api")
+        self.assertEqual(client.verify, False)
+
         client = CheckmywsClient()
+        self.assertEqual(client.url, "https://api.checkmy.ws/api")
+
+        if not PY26:
+            self.assertEqual(client.verify, True)
 
     def test_02_request(self):
         with HTTMock(mock_200):

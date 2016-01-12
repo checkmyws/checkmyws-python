@@ -24,7 +24,7 @@ BASE_URL = "https://api.checkmy.ws/api"
 class CheckmywsClient(object):
 
     def __init__(self, proxy=None, verify=True,
-                 login=None, passwd=None, token=None):
+                 login=None, passwd=None, token=None, url=None):
 
         self.logger = logging.getLogger("CheckmywsClient")
         self.logger.debug("Initialize")
@@ -32,6 +32,15 @@ class CheckmywsClient(object):
         self.session = requests.Session()
         self.proxies = None
         self.verify = verify
+        self.url = url
+
+        if self.url is None:
+            self.url = BASE_URL
+
+        if "api.dev" in self.url:
+            self.verify = False
+
+        self.logger.debug("Url: %s, Verify: %s", self.url, self.verify)
 
         self.login = login
         self.passwd = passwd
@@ -57,7 +66,7 @@ class CheckmywsClient(object):
             """
             Make a http request to API
             """
-            url = "{0}{1}".format(BASE_URL, path)
+            url = "{0}{1}".format(self.url, path)
 
             if params is None:
                 params = {}
