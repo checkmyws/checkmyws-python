@@ -10,8 +10,11 @@ todo
 
 ## WAMP api
 
-Setup a test environment
+### Generate a token
 
+![Token](doc/images/tokens.png)
+
+### Setup a test environment
 ```
 git clone -b live https://github.com/checkmyws/checkmyws-python.git
 cd checkmyws-python
@@ -21,7 +24,7 @@ pip install -r requirements.txt
 pip install service_identity pyOpenSSL twisted txaio autobahn
 ```
 
-Exemple
+### Client
 ```
 import logging
 logging.basicConfig(level=logging.INFO)
