@@ -13,11 +13,12 @@ todo
 Setup a test environment
 
 ```
-git clone https://github.com/checkmyws/checkmyws-python.git
+git clone -b live https://github.com/checkmyws/checkmyws-python.git
 cd checkmyws-python
 virtualenv python
 source python/bin/activate
-pip install twisted txaio autobahn
+pip install -r requirements.txt
+pip install service_identity pyOpenSSL twisted txaio autobahn
 ```
 
 Exemple
