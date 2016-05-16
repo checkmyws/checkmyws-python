@@ -50,7 +50,7 @@ class Live(ApplicationSession):
         if '-' not in self.account_id:
             self.account_id = "local-%s" % self.account_id
 
-        self.authid = '%s:%s' % (self.account_id , self.secret[-7:])
+        self.authid = '%s:%s' % (self.account_id, self.secret[-7:])
 
         self.joined = False
         self.lock = DeferredLock()
@@ -65,7 +65,10 @@ class Live(ApplicationSession):
         self.join(self.config.realm, [u"wampcra"], self.authid)
 
     def onChallenge(self, challenge):
-        self.logger.info("Authenticate connection %s@%s (challenge) ...", self.authid, self.config.realm)
+        self.logger.info(
+            "Authenticate connection %s@%s (challenge) ...",
+            self.authid, self.config.realm
+        )
 
         self.logger.debug("Challenge:")
         self.logger.debug(" + method: %s", challenge.method)
@@ -97,8 +100,6 @@ class Live(ApplicationSession):
 
     @inlineCallbacks
     def api_onRawEvent(self, event, details):
-        topic = details.topic
-
         scope = event['scope']
         procedure = event['procedure']
         output = event['output']
@@ -134,13 +135,13 @@ class Live(ApplicationSession):
 
         self.logger.debug("onCheck %s", uri)
 
-        for pattern, funcs  in callbacks.items():
+        for pattern, funcs in callbacks.items():
             pattern = re_cache[pattern]
             if re.match(pattern, uri):
                 for func in funcs:
                     try:
                         func(timestamp, check, procedure, location, worker, output)
-                    except Exception as err:
+                    except Exception:
                         self.logger.error(traceback.format_exc())
 
         yield
@@ -164,7 +165,7 @@ class Live(ApplicationSession):
         self.logger.info("Leaving WAMP Broker")
         ApplicationSession.onLeave(self, *args, **kwargs)
 
-    def onDisconnect(self,  *args, **kwargs):
+    def onDisconnect(self, *args, **kwargs):
         ApplicationSession.onDisconnect(self, *args, **kwargs)
 
         if not self.joined:
@@ -226,7 +227,7 @@ def run(url="wss://api.checkmy.ws/live", realm="live", authid=None, secret=None,
     try:
         runner.run(Live)
 
-    except Exception as err:
+    except Exception:
         print(traceback.format_exc())
         # Safety sleep
         time.sleep(3)
