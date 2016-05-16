@@ -58,7 +58,7 @@ class Live(ApplicationSession):
         self.checks = {}
         self.workers = {}
 
-        self.CallOptions = CallOptions(disclose_me=True)
+        self.CallOptions = CallOptions()
 
     def onConnect(self):
         self.logger.info("Connected")
@@ -210,7 +210,6 @@ def run(url="wss://api.checkmy.ws/live", realm="live", authid=None, secret=None,
     config = {
         'url': url.decode(),
         'realm': realm.decode(),
-        'debug': debug,
         'extra': {
             'authid': authid,
             'secret': secret
