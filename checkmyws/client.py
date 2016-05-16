@@ -12,11 +12,7 @@ import time
 
 from checkmyws.exception import CheckmywsError
 
-if PY26:
-    requests.packages.urllib3.disable_warnings()
-
-else:
-    logging.captureWarnings(True)
+requests.packages.urllib3.disable_warnings()
 
 BASE_URL = "https://api.checkmy.ws/api"
 
