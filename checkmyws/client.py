@@ -89,12 +89,13 @@ class CheckmywsClient(object):
                 return
 
         data = {
-            'login': self.login,
-            'passwd': self.passwd
+            'login': self.login
         }
 
         if self.token:
             data['token'] = self.token
+        else:
+            data['passwd'] = self.passwd
 
         self.request(path="/auth/signin", method="POST", data=data)
         self.authed = True
